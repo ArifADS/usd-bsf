@@ -1,10 +1,57 @@
-var express = require('express');
-var app = express();
-var request = require("request")
-var port = process.env.PORT || 5000;
+var express   = require('express');
+var request   = require("request")
+var mongoose  = require('mongoose');
 
+var app = express();
+var port = process.env.PORT || 5000;
+var mongoURI = process.env.MONGOLAB_URI || "mongodb://heroku_53f0ml6l:qj1jq2e7593ark11281m0thq52@ds011369.mlab.com:11369/heroku_53f0ml6l";
 
 app.use(express.static('public'));
+mongoose.connect(mongoURI);
+
+var phSchema = new mongoose.Schema({
+      dt       : Number,
+      simadi   : Number,
+      date     : Number
+    }),
+
+    PriceHistory = mongoose.model('PriceHistory', phSchema);
+
+
+app.get('/history',function(req,res){
+
+  PriceHistory.find({}, function (err, history) {
+    res.json(history);
+  })
+})
+
+app.get('/savePrice',function(req,res){
+  res.set('Content-Type', 'application/json');
+  var url = "https://ddzcb7dwlckfq.cloudfront.net/custom/rate.js"
+
+  request(url, function (error, response, body) {
+
+    if (!error && response.statusCode === 200) {
+
+      var obj = JSON.parse(body.replace("var dolartoday = \n",""))
+      var dt = obj.USD.dolartoday
+      var sm = obj.USD.sicad2
+
+      var price1 = new PriceHistory({dt:dt,date: new Date().getTime() / 1000,simadi: sm})
+
+      console.log(price1)
+
+      price1.save(function (err, userObj) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('saved successfully:', userObj);
+        }
+      });
+
+    }
+  })
+})
 
 app.get('/sendPush',function(req,res){
   res.sendFile("/public/sendMensajePush.html", { root : __dirname});
@@ -32,15 +79,14 @@ app.get('/dolar', function (req, res) {
 
       var precios = []
 
-
-
       for (var i = 0; i < losNombres.length; i++)
       {
         precios.push({nombre:losNombres[i],precio:losPrecios[i]})
       }
 
       var obj = {rate:rate,precios:precios}
-      res.send(JSON.stringify(obj,null,2))
+      res.json(obj)
+      //res.send(JSON.stringify(obj,null,2))
     }
   })
 
