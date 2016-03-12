@@ -1,0 +1,19 @@
+{
+  "name": "dolarhoy",
+  "version": "1.0.0",
+  "description": "Test Express with DolarHoy App",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies":{
+    "express": "latest",
+    "request": "latest"
+  },
+  "engines":{
+      "node":"latest",
+      "npm":"latest"
+  },
+  "author": "",
+  "license": "ISC"
+}

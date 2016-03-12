@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <title>Push Tester</title>
+  </head>
+  <body>
+    <div class="title">
+      <h1>Pusher</h1>
+      <h4>Envía notifiaciones de Aviso o Alerta.</h4>
+    </div>
+
+    <div class="form">
+      <form action="sentAvisoOutside.php" id="usrform" method="post">
+        <div class="header">
+          Usuario:<br>
+          <input type="text" name="userName"><br>
+          <input type="radio" name="tipo" value="Push" checked> Alerta
+          <input type="radio" name="tipo" value="Aviso"       > Aviso <br>
+          <textarea placeholder="Escriba el mensaje aquí..." rows="4" cols="50" name="mensaje" form="usrform"></textarea><br>
+        </div>
+        <div class="bottom">
+          <input type="submit" value="Enviar">
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
