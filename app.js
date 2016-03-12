@@ -26,16 +26,21 @@ app.get('/dolar', function (req, res) {
       var sm = obj.USD.sicad2
 
 
+
       var losNombres = ["Dolar Today", "SIMADI"];
       var losPrecios = [dt,sm];
 
       var precios = []
 
+
+
       for (var i = 0; i < losNombres.length; i++)
       {
         precios.push({nombre:losNombres[i],precio:losPrecios[i]})
       }
-      res.send(JSON.stringify(precios,null,2))
+
+      var obj = {rate:rate,precios:precios}
+      res.send(JSON.stringify(obj,null,2))
     }
   })
 
