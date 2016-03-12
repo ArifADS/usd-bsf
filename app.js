@@ -18,9 +18,11 @@ var phSchema = new mongoose.Schema({
     PriceHistory = mongoose.model('PriceHistory', phSchema);
 
 
+
+
 app.get('/history',function(req,res){
 
-  PriceHistory.find({}, function (err, history) {
+  PriceHistory.find().sort({date:1}).exec(function (err, history) {
     res.json(history);
   })
 })
@@ -72,13 +74,10 @@ app.get('/dolar', function (req, res) {
       var dt = obj.USD.dolartoday
       var sm = obj.USD.sicad2
 
-
-
       var losNombres = ["Dolar Today", "SIMADI"];
       var losPrecios = [dt,sm];
 
       var precios = []
-
       for (var i = 0; i < losNombres.length; i++)
       {
         precios.push({nombre:losNombres[i],precio:losPrecios[i]})
@@ -90,6 +89,10 @@ app.get('/dolar', function (req, res) {
     }
   })
 
+});
+
+app.use(function(req, res, next) {
+  res.status(404).sendFile("/public/404.html", { root : __dirname});
 });
 
 app.listen(port, function () {
