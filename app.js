@@ -71,7 +71,7 @@ app.get('/dolar', function (req, res) {
       var rate = obj.EURUSD.rate
       var dt = obj.USD.dolartoday
       var sm = obj.USD.sicad2
-      var petroleo = obj.MISC.petroleo
+      var petroleo = Number(obj.MISC.petroleo)
 
       var losNombres = ["Dolar Today", "SIMADI","Barril Petróleo"];
       var losPrecios = [dt,sm,petroleo];
