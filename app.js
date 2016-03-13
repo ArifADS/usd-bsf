@@ -18,8 +18,6 @@ var phSchema = new mongoose.Schema({
     PriceHistory = mongoose.model('PriceHistory', phSchema);
 
 
-
-
 app.get('/history',function(req,res){
 
   PriceHistory.find().sort({date:1}).exec(function (err, history) {
@@ -73,13 +71,13 @@ app.get('/dolar', function (req, res) {
       var rate = obj.EURUSD.rate
       var dt = obj.USD.dolartoday
       var sm = obj.USD.sicad2
+      var petroleo = obj.MISC.petroleo
 
-      var losNombres = ["Dolar Today", "SIMADI"];
-      var losPrecios = [dt,sm];
+      var losNombres = ["Dolar Today", "SIMADI","Barril Petróleo"];
+      var losPrecios = [dt,sm,petroleo];
 
       var precios = []
-      for (var i = 0; i < losNombres.length; i++)
-      {
+      for (var i = 0; i < losNombres.length; i++){
         precios.push({nombre:losNombres[i],precio:losPrecios[i]})
       }
 
