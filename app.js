@@ -3,7 +3,7 @@ var request   = require("request")
 var mongoose  = require('mongoose');
 
 var app = express();
-var port = process.env.PORT || 5000;
+var port = process.env.PORT || 5694;
 var mongoURI = process.env.MONGOLAB_URI || "mongodb://heroku_53f0ml6l:qj1jq2e7593ark11281m0thq52@ds011369.mlab.com:11369/heroku_53f0ml6l";
 
 app.use(express.static('public'));
@@ -59,6 +59,8 @@ app.get('/sendPush',function(req,res){
 
 app.get('/dolar', function (req, res) {
 
+  console.log("GET /dolar");
+
   res.set('Content-Type', 'application/json');
 
   var url = "https://ddzcb7dwlckfq.cloudfront.net/custom/rate.js"
@@ -72,6 +74,7 @@ app.get('/dolar', function (req, res) {
       var dt = obj.USD.dolartoday
       var sm = obj.USD.sicad2
       var petroleo = parseFloat(obj.MISC.petroleo)
+      var epoch = Number(obj._timestamp.epoch)
 
       var losNombres = ["Dolar Today", "SIMADI","Barril Petróleo"];
       var losPrecios = [dt,sm,petroleo];
@@ -81,7 +84,7 @@ app.get('/dolar', function (req, res) {
         precios.push({nombre:losNombres[i],precio:losPrecios[i]})
       }
 
-      var obj = {rate:rate,precios:precios}
+      var obj = {rate:rate,date:epoch,precios:precios}
       res.json(obj)
       //res.send(JSON.stringify(obj,null,2))
     }
