@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/style2.css">
+  <link rel="stylesheet" href="css/style.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
@@ -22,36 +22,35 @@
 
   <style>
 
-  body{
-    background-color: #292C30;
-  }
 
-  h1{
-    color:#689847;
-  }
-  p{
-    color:white;
-    font-size: 35px;
-  }
 
   </style>
 
 </head>
 <body ng-app="DolarHoy" ng-controller="customersCtrl">
   <div class="container">
+    <p class="date">
+      {{date | date:'medium'}}
+    </p>
 
-    <div ng-repeat="precio in precios">
-      <h1>{{precio.nombre}}</h1>
-      <p>
-        ${{precio.precio}}
-      </p>
-
+    <div class="row">
+      <div class="col-sm-4">
+        <div ng-repeat="precio in precios">
+          <h1>{{precio.nombre}}</h1>
+          <p class="precio">${{precio.precio}}</p>
+        </div>
+      </div>
+      <div class="col-sm-8">
+        <canvas id="line" class="chart chart-line" chart-data="data"
+        chart-labels="labels" chart-legend="true" chart-series="series"
+        chart-click="onClick">
+      </canvas>
     </div>
+  </div>
 
-    <canvas id="line" class="chart chart-line" chart-data="data"
-    chart-labels="labels" chart-legend="true" chart-series="series"
-    chart-click="onClick">
-  </canvas>
+
+
+
 
 
 
@@ -63,15 +62,22 @@
 <script>
 var app = angular.module('DolarHoy', ["chart.js"]);
 
+app.config(['ChartJsProvider', function (ChartJsProvider) {
+    // Configure all charts
+    ChartJsProvider.setOptions({
+      colours: ['#1B5E20', '#43A047'],
+      responsive: true
+    });
+    // Configure all line charts
+    ChartJsProvider.setOptions('Line', {
+      datasetFill: true
+    });
+  }])
+
 app.controller('customersCtrl', function ($scope,$http,$filter) {
 
+  $scope.series = ['Dolar Today', 'SIMADI'];
 
-  $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
-  $scope.series = ['Dolar Today', 'Simadi'];
-  $scope.data = [
-    [65, 59, 80, 81, 56, 55, 40],
-    [28, 48, 40, 19, 86, 27, 90]
-  ];
   $scope.onClick = function (points, evt) {
     console.log(points, evt);
   };
@@ -82,10 +88,16 @@ app.controller('customersCtrl', function ($scope,$http,$filter) {
     var dt = [];
     var simadi = [];
     var date = [];
+    var i = 0;
     data.forEach(function(item){
-      dt.push(item.dt);
-      simadi.push(item.simadi);
-      date.push($filter('date')(item.date*1000, "dd-MM-yyyy"));
+      if (i % 3 == 0){
+        dt.push(item.dt);
+        simadi.push(item.simadi);
+        date.push($filter('date')(item.date*1000, "dd-MM-yyyy"));
+
+      }
+
+      i = i+1;
     })
     $scope.labels = date
     $scope.data = [dt,simadi];
@@ -97,6 +109,7 @@ app.controller('customersCtrl', function ($scope,$http,$filter) {
 
   $http.get("/dolar")
   .then(function (response) {
+    $scope.date = response.data.date*1000;
     $scope.precios = response.data.precios;
   });
 });
