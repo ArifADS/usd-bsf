@@ -10,12 +10,12 @@ app.use(express.static('public'));
 mongoose.connect(mongoURI);
 
 var phSchema = new mongoose.Schema({
-      dt       : Number,
-      simadi   : Number,
-      date     : Number
-    }),
+  dt       : Number,
+  simadi   : Number,
+  date     : Number
+}),
 
-    PriceHistory = mongoose.model('PriceHistory', phSchema);
+PriceHistory = mongoose.model('PriceHistory', phSchema);
 
 
 app.get('/history',function(req,res){
@@ -53,15 +53,9 @@ app.get('/savePrice',function(req,res){
   })
 })
 
-app.get('/sendPush',function(req,res){
-  res.sendFile("/public/sendMensajePush.html", { root : __dirname});
-})
 
 app.get('/dolar', function (req, res) {
-
   console.log("GET /dolar");
-
-  res.set('Content-Type', 'application/json');
 
   var url = "https://ddzcb7dwlckfq.cloudfront.net/custom/rate.js"
 
@@ -85,8 +79,10 @@ app.get('/dolar', function (req, res) {
       }
 
       var obj = {rate:rate,date:epoch,precios:precios}
-      res.json(obj)
-      //res.send(JSON.stringify(obj,null,2))
+      res.json(obj);
+    }
+    else{
+      res.json({error:true,msg:"Problema cargando Dolar Today"})
     }
   })
 

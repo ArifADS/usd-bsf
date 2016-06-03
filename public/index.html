@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+  <title>Dolar Hoy</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/style2.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+
+
+  <script src='bower_components/Chart.js/Chart.js'></script>
+  <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css">
+  <script src="http://cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.min.js"></script>
+
+
+  <style>
+
+  body{
+    background-color: #292C30;
+  }
+
+  h1{
+    color:#689847;
+  }
+  p{
+    color:white;
+    font-size: 35px;
+  }
+
+  </style>
+
+</head>
+<body ng-app="DolarHoy" ng-controller="customersCtrl">
+  <div class="container">
+
+    <div ng-repeat="precio in precios">
+      <h1>{{precio.nombre}}</h1>
+      <p>
+        ${{precio.precio}}
+      </p>
+
+    </div>
+
+    <canvas id="line" class="chart chart-line" chart-data="data"
+    chart-labels="labels" chart-legend="true" chart-series="series"
+    chart-click="onClick">
+  </canvas>
+
+
+
+</div>
+
+
+
+
+<script>
+var app = angular.module('DolarHoy', ["chart.js"]);
+
+app.controller('customersCtrl', function ($scope,$http,$filter) {
+
+
+  $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+  $scope.series = ['Dolar Today', 'Simadi'];
+  $scope.data = [
+    [65, 59, 80, 81, 56, 55, 40],
+    [28, 48, 40, 19, 86, 27, 90]
+  ];
+  $scope.onClick = function (points, evt) {
+    console.log(points, evt);
+  };
+
+  $http.get("/history")
+  .then(function (response) {
+    var data = response.data;
+    var dt = [];
+    var simadi = [];
+    var date = [];
+    data.forEach(function(item){
+      dt.push(item.dt);
+      simadi.push(item.simadi);
+      date.push($filter('date')(item.date*1000, "dd-MM-yyyy"));
+    })
+    $scope.labels = date
+    $scope.data = [dt,simadi];
+  });
+
+  $scope.precios = [];
+  $scope.rate = 1.1357;
+  $scope.date;
+
+  $http.get("/dolar")
+  .then(function (response) {
+    $scope.precios = response.data.precios;
+  });
+});
+</script>
+</body>
+</html>
