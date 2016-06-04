@@ -19,25 +19,20 @@
   <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css">
   <script src="https://cdn.jsdelivr.net/angular.chartjs/latest/angular-chart.min.js"></script>
 
-
-  <style>
-
-
-
-  </style>
-
 </head>
 <body ng-app="DolarHoy" ng-controller="customersCtrl">
   <div class="container">
+    <br>
     <p class="date">
       {{date | date:'medium'}}
     </p>
+    <br>
 
     <div class="row">
       <div class="col-sm-4">
         <div ng-repeat="precio in precios">
           <h1>{{precio.nombre}}</h1>
-          <p class="precio">${{precio.precio}}</p>
+          <p class="precio">  ${{precio.precio}}</p>
         </div>
       </div>
       <div class="col-sm-8">
@@ -47,13 +42,6 @@
       </canvas>
     </div>
   </div>
-
-
-
-
-
-
-
 </div>
 
 
@@ -90,11 +78,10 @@ app.controller('customersCtrl', function ($scope,$http,$filter) {
     var date = [];
     var i = 0;
     data.forEach(function(item){
-      if (i % 3 == 0){
+      if (i % 5 == 0){
         dt.push(item.dt);
         simadi.push(item.simadi);
         date.push($filter('date')(item.date*1000, "dd-MM-yyyy"));
-
       }
 
       i = i+1;
