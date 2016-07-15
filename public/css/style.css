@@ -6,12 +6,12 @@ body{
   margin: auto;
 }
 
-h1{
+.h3{
   color:#689847;
 }
 p.precio{
   color:white;
-  font-size: 30px;
+  font-size: 48px;
   font-weight: 100;
   margin-left:0.5em;
 }
