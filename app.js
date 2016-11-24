@@ -20,7 +20,7 @@ PriceHistory = mongoose.model('PriceHistory', phSchema);
 
 app.get('/history/:size',function(req,res){
 
-  var size = 50;
+  var size = req.params.size*1 || 50
   PriceHistory.find().sort({date:-1}).limit(size).exec(function (err, history) {
     res.json(history.reverse());
   })
