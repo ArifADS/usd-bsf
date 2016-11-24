@@ -70,7 +70,7 @@ app.controller('customersCtrl', function ($scope,$http,$filter) {
     console.log(points, evt);
   };
 
-  $http.get("/history")
+  $http.get("/history/90")
   .then(function (response) {
     var data = response.data;
     var dt = [];
@@ -78,11 +78,11 @@ app.controller('customersCtrl', function ($scope,$http,$filter) {
     var date = [];
     var i = 0;
     data.forEach(function(item){
-      if (i % 5 == 0){
+      //if (i % 5 == 0){
         dt.push(item.dt);
         simadi.push(item.simadi);
         date.push($filter('date')(item.date*1000, "dd-MM-yyyy"));
-      }
+      //}
 
       i = i+1;
     })
