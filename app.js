@@ -26,34 +26,6 @@ app.get('/history/:size',function(req,res){
   })
 })
 
-app.get('/savePrice',function(req,res){
-  res.set('Content-Type', 'application/json');
-  var url = "https://ddzcb7dwlckfq.cloudfront.net/custom/rate.js"
-
-  request(url, function (error, response, body) {
-
-    if (!error && response.statusCode === 200) {
-
-      var obj = JSON.parse(body.replace("var dolartoday = \n",""))
-      var dt = obj.USD.dolartoday
-      var sm = obj.USD.sicad2
-
-      var price1 = new PriceHistory({dt:dt,date: new Date().getTime() / 1000,simadi: sm})
-
-      console.log(price1)
-
-      price1.save(function (err, userObj) {
-        if (err) {
-          console.log(err);
-        } else {
-          console.log('saved successfully:', userObj);
-        }
-      });
-
-    }
-  })
-})
-
 
 app.get('/dolar', function (req, res) {
   console.log("GET /dolar");
