@@ -20,8 +20,8 @@ PriceHistory = mongoose.model('PriceHistory', phSchema);
 
 app.get('/history',function(req,res){
 
-  PriceHistory.find().sort({date:1}).limit(30).exec(function (err, history) {
-    res.json(history);
+  PriceHistory.find().sort({date:-1}).limit(49).exec(function (err, history) {
+    res.json(history.reverse());
   })
 })
 
