@@ -2,9 +2,9 @@
   "name": "dolarhoy",
   "version": "1.0.0",
   "description": "Test Express with DolarHoy App",
-  "main": "app.js",
+  "main": "./server/index.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node server/"
   },
   "dependencies": {
     "axios": "^0.18.0",
