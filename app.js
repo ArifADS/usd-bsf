@@ -9,13 +9,12 @@ var mongoURI = process.env.MONGOLAB_URI || "mongodb://heroku_53f0ml6l:qj1jq2e759
 app.use(express.static('public'));
 mongoose.connect(mongoURI);
 
-var phSchema = new mongoose.Schema({
+
+const PriceHistory = mongoose.model('PriceHistory', {
   dt: Number,
   simadi: Number,
   date: Number
-}),
-
-  PriceHistory = mongoose.model('PriceHistory', phSchema);
+});
 
 
 app.get('/history/:size', async (req, res) => {
@@ -24,7 +23,7 @@ app.get('/history/:size', async (req, res) => {
     let history = await PriceHistory.find().sort({ date: -1 }).limit(size);
     res.json(history.reverse());
   }
-  catch(e) {
+  catch (e) {
     console.error(e);
     res.status(e.status || 500).send(e.message)
   }
@@ -56,11 +55,10 @@ app.get("/dolar", async (req, res) => {
       date
     })
   }
-  catch(e) {
+  catch (e) {
     console.error(e);
     res.status(e.status || 500).send(e.message)
   }
-  
 })
 
 app.use((req, res, next) => {
