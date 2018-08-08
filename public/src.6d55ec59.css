@@ -1,0 +1,26 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,100,300italic);
+body{
+  font-family: 'Roboto', sans-serif;
+  background-color: #292C30;
+  font-weight: 400;
+  margin: auto;
+}
+
+.h3{
+  color:#64DD17;
+}
+.precio{
+  color:white;
+  font-size: 48px;
+  font-weight: 100;
+  margin-left:0.5em;
+}
+
+p.date{
+  font-size: 15px;
+  color:white;
+  font-style: italic;
+  font-weight: 300;
+  text-align: right;
+  color: #9E9E9E;
+}

@@ -1,105 +1,17 @@
 <!DOCTYPE html>
-<html >
+<html>
 
 <head>
-  <title>Dolar Hoy</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/style.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <meta charset="utf-8">
+    <title>React Parcel Demo</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
+<link rel="stylesheet" href="/src.6d55ec59.css"></head>
 
-
-  <script src='bower_components/Chart.js/Chart.js'></script>
-  <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.min.css">
-  <script src="bower_components/angular-chart.js/dist/angular-chart.min.js"></script>
-
-</head>
-<body ng-app="DolarHoy" ng-controller="customersCtrl">
-  <div class="container">
-    <br>
-    <p class="date">
-      {{date | date:'medium'}}
-    </p>
-    <br>
-
-    <div class="row">
-      <div class="col-sm-4">
-        <div ng-repeat="precio in precios">
-          <h1 class="h3">{{precio.nombre}}</h1>
-          <p class="precio">  ${{precio.precio}}</p>
-        </div>
-      </div>
-      <div class="col-sm-8">
-        <canvas id="line" class="chart chart-line" chart-data="data"
-        chart-labels="labels" chart-legend="true" chart-series="series"
-        chart-click="onClick">
-      </canvas>
-    </div>
-  </div>
-</div>
-
-
-
-
-<script>
-var app = angular.module('DolarHoy', ["chart.js"]);
-
-app.config(['ChartJsProvider', function (ChartJsProvider) {
-    // Configure all charts
-    ChartJsProvider.setOptions({
-      colours: ['#1B5E20', '#43A047'],
-      responsive: true
-    });
-    // Configure all line charts
-    ChartJsProvider.setOptions('Line', {
-      datasetFill: true
-    });
-  }])
-
-app.controller('customersCtrl', function ($scope,$http,$filter) {
-
-  $scope.series = ['Dolar Today', 'SIMADI'];
-
-  $scope.onClick = function (points, evt) {
-    console.log(points, evt);
-  };
-
-  $http.get("/history/30")
-  .then(function (response) {
-    var data = response.data;
-    var dt = [];
-    var simadi = [];
-    var date = [];
-    var i = 0;
-    data.forEach(function(item){
-      //if (i % 5 == 0){
-        dt.push(item.dt);
-        simadi.push(item.simadi);
-        date.push($filter('date')(item.date*1000, "dd-MM-yyyy"));
-      //}
-
-      i = i+1;
-    })
-    $scope.labels = date
-    $scope.data = [dt,simadi];
-  });
-
-  $scope.precios = [];
-  $scope.rate = 1.1357;
-  $scope.date;
-
-  $http.get("/dolar")
-  .then(function (response) {
-    $scope.date = response.data.date*1000;
-    $scope.precios = response.data.precios;
-  });
-});
-</script>
+<body>
+    <div id="app"></div>
+    <script src="/src.6d55ec59.js"></script>
 </body>
+
 </html>
