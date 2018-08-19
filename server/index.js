@@ -7,7 +7,7 @@ var app = express();
 var port = process.env.PORT || 5694;
 var mongoURI = process.env.MONGOLAB_URI || "mongodb://heroku_53f0ml6l:qj1jq2e7593ark11281m0thq52@ds011369.mlab.com:11369/heroku_53f0ml6l";
 
-app.use(express.static('public'));
+app.use(express.static('./client/build'));
 mongoose.connect(mongoURI);
 
 
