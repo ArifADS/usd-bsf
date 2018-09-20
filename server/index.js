@@ -15,8 +15,8 @@ mongoose.connect(MONGOLAB_URI, { useNewUrlParser: true });
 app.get('/history/:size', async (req, res) => {
     try {
         let size = req.params.size * 1 || 50
-        let history = await PriceHistory.find().sort({ date: 1 }).limit(size);
-        res.json(history);
+        let history = await PriceHistory.find().sort({ date: -1 }).limit(size);
+        res.json(history.reverse());
     }
     catch (e) {
         console.error(e);
