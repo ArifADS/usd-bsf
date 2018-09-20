@@ -8,7 +8,6 @@ var app = express();
 const { PORT, MONGOLAB_URI, DATA_URL } = process.env;
 
 app.use(cors())
-app.use(express.static('./client/build'));
 mongoose.connect(MONGOLAB_URI, { useNewUrlParser: true });
 
 
@@ -25,7 +24,6 @@ app.get('/history/:size', async (req, res) => {
 })
 
 app.get("/dolar", async (req, res) => {
-    console.log("GET /dolar");
     try {
         let { data } = await axios(DATA_URL);
         let obj = JSON.parse(data.replace("var dolartoday = \n", ""))
@@ -53,10 +51,6 @@ app.get("/dolar", async (req, res) => {
         console.error(e);
         res.status(e.status || 500).send(e.message)
     }
-})
-
-app.use((req, res, next) => {
-    res.status(404).sendFile("/public/404.html", { root: __dirname });
 })
 
 app.listen(PORT, () => {
