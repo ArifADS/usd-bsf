@@ -1,21 +1,22 @@
+require('dotenv').config();
 var express = require('express');
+var cors = require('cors')
 var axios = require("axios")
 var mongoose = require('mongoose');
 const { PriceHistory } = require("./models")
-
 var app = express();
-var port = process.env.PORT || 5694;
-var mongoURI = process.env.MONGOLAB_URI || "mongodb://heroku_53f0ml6l:qj1jq2e7593ark11281m0thq52@ds011369.mlab.com:11369/heroku_53f0ml6l";
+const { PORT, MONGOLAB_URI, DATA_URL } = process.env;
 
+app.use(cors())
 app.use(express.static('./client/build'));
-mongoose.connect(mongoURI);
+mongoose.connect(MONGOLAB_URI, { useNewUrlParser: true });
 
 
 app.get('/history/:size', async (req, res) => {
     try {
         let size = req.params.size * 1 || 50
-        let history = await PriceHistory.find().sort({ date: -1 }).limit(size);
-        res.json(history.reverse());
+        let history = await PriceHistory.find().sort({ date: 1 }).limit(size);
+        res.json(history);
     }
     catch (e) {
         console.error(e);
@@ -26,8 +27,7 @@ app.get('/history/:size', async (req, res) => {
 app.get("/dolar", async (req, res) => {
     console.log("GET /dolar");
     try {
-        let url = "https://ddzcb7dwlckfq.cloudfront.net/custom/rate.js"
-        let { data } = await axios(url);
+        let { data } = await axios(DATA_URL);
         let obj = JSON.parse(data.replace("var dolartoday = \n", ""))
         let rate = obj.EURUSD.rate
         let dt = obj.USD.dolartoday
@@ -59,6 +59,6 @@ app.use((req, res, next) => {
     res.status(404).sendFile("/public/404.html", { root: __dirname });
 })
 
-app.listen(port, () => {
-    console.log('Example app listening on port ' + port);
+app.listen(PORT, () => {
+    console.log('Dolar Server listening on port ' + PORT);
 })
